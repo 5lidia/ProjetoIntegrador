@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block titulo %}Sobre{% endblock %}
+{% block conteudo %}
+<section class="sobre">
+  <div>
+    <span class="sobretitulo">O projeto</span>
+    <h1>Sobre o Empreende Tec</h1>
+    <p class="suave">Uma vitrine para estudantes divulgarem seus produtos e serviços: doces, bebidas, lanches, artesanato, roupas, materiais, serviços e outros.</p>
+    <ul class="lista-check">
+      <li>Cada estudante cria sua conta e a sua loja</li>
+      <li>Anúncios com foto, preço, pagamento e local de entrega</li>
+      <li>Clientes interessados deixam o contato direto no anúncio</li>
+      <li>Conversa e combinação pelo WhatsApp</li>
+    </ul>
+    <div class="botoes"><a class="btn" href="{{ url_for('produtos') }}">Ver anúncios</a><a class="btn btn-sec" href="{{ url_for('cadastro') }}">Quero vender</a></div>
+  </div>
+  <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Empreende Tec">
+</section>
+{% endblock %}

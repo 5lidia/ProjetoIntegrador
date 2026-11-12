@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block titulo %}Cadastro{% endblock %}
+{% block conteudo %}
+<div class="auth">
+  <aside class="auth-lado">
+    <div>
+      <h2>Abra sua loja na vitrine</h2>
+      <p>Mostre seu trabalho para toda a escola.</p>
+    </div>
+    <ul>
+      <li>Cadastro grátis e rápido</li>
+      <li>Anuncie produtos e serviços</li>
+      <li>Receba contatos de clientes interessados</li>
+    </ul>
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="">
+  </aside>
+  <div class="auth-form">
+    <div class="form-titulo"><h1>Crie sua conta de vendedor</h1><p>Campos com * são obrigatórios.</p></div>
+    <form class="f" method="post" enctype="multipart/form-data">
+      {% set v = f %}{% include '_campos_usuario.html' %}
+      <div class="campos">
+        <label>Senha *<input name="senha" type="password" required autocomplete="new-password"></label>
+        <label>Confirmar senha *<input name="confirmar_senha" type="password" required autocomplete="new-password"></label>
+      </div>
+      <button class="btn btn-lg btn-bloco">Cadastrar</button>
+      <p class="suave" style="margin:0;text-align:center">Já tem conta? <a href="{{ url_for('login') }}">Entrar</a></p>
+    </form>
+  </div>
+</div>
+{% endblock %}

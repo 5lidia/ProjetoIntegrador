@@ -1,0 +1,22 @@
+{% extends 'base.html' %}{% from '_card.html' import card %}
+{% block titulo %}Produtos e serviços{% endblock %}
+{% block conteudo %}
+<div class="cabecalho-pagina">
+  <span class="sobretitulo">Vitrine</span>
+  <h1>Produtos e serviços</h1>
+  <p>Use a busca e os filtros para encontrar o que você precisa.</p>
+</div>
+<form method="get" class="card filtros" role="search">
+  <input class="busca" name="q" value="{{ f.q }}" placeholder="Buscar por nome ou descrição..." aria-label="Buscar">
+  <select name="tipo" aria-label="Tipo"><option value="">Todos os tipos</option>{% for t in TIPOS %}<option {% if f.tipo==t %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+  <select name="categoria" aria-label="Categoria"><option value="">Todas as categorias</option>{% for c in categorias %}<option value="{{ c.id }}" {% if f.categoria==c.id|string %}selected{% endif %}>{{ c.icone }} {{ c.nome }}</option>{% endfor %}</select>
+  <button class="btn">Filtrar</button>
+  <a class="btn btn-sec" href="{{ url_for('produtos') }}">Limpar</a>
+</form>
+{% if items %}
+  <p class="contagem">{{ items|length }} {{ 'resultado' if items|length == 1 else 'resultados' }}</p>
+  <div class="grid">{% for p in items %}{{ card(p) }}{% endfor %}</div>
+{% else %}
+  <div class="vazio"><span>🔎</span><h3>Nada encontrado</h3><p>Tente outra palavra ou limpe os filtros.</p><a class="btn btn-sec" href="{{ url_for('produtos') }}">Limpar filtros</a></div>
+{% endif %}
+{% endblock %}

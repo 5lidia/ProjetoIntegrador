@@ -1,0 +1,21 @@
+{% macro card(p) %}
+<article class="card produto-card">
+  <div class="foto">
+    {% if p.imagem %}<img src="{{ url_for('uploaded_file', filename=p.imagem) }}" alt="{{ p.nome }}" loading="lazy">
+    {% else %}<img class="sem-foto" src="{{ url_for('static', filename='img/logo.png') }}" alt="" loading="lazy">{% endif %}
+    <div class="selos">
+      <span class="tag">{{ p.tipo }}</span>
+      {% if p.status=='Esgotado' %}<span class="tag tag-esgotado">Esgotado</span>{% endif %}
+    </div>
+  </div>
+  <div class="corpo">
+    <span class="cat-nome">{{ p.icone }} {{ p.categoria }}</span>
+    <h3><a href="{{ url_for('produto', produto_id=p.id) }}">{{ p.nome }}</a></h3>
+    <span class="vendedor">por {{ p.loja or p.vendedor }}</span>
+    <div class="rodape-card">
+      <span class="preco">{{ p.preco|brl }}</span>
+      <span class="btn btn-sm">Ver detalhes</span>
+    </div>
+  </div>
+</article>
+{% endmacro %}

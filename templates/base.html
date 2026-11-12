@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block titulo %}Empreende Tec{% endblock %} · Empreende Tec</title>
+  <meta name="description" content="{% block descricao %}Vitrine de produtos e serviços feitos por estudantes: doces, lanches, artesanato, roupas e muito mais.{% endblock %}">
+  <meta name="theme-color" content="#261C16">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cores.css') }}">
+</head>
+<body>
+{% set ep = request.endpoint %}
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="{{ url_for('index') }}" aria-label="Empreende Tec - início">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Empreende Tec" class="logo">
+    </a>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <label for="menu-toggle" class="menu-botao" aria-label="Abrir menu"><span></span><span></span><span></span></label>
+    <nav class="menu">
+      <a href="{{ url_for('index') }}" class="{{ 'ativo' if ep=='index' }}">Início</a>
+      <a href="{{ url_for('produtos') }}" class="{{ 'ativo' if ep in ('produtos','produto') }}">Produtos e serviços</a>
+      <a href="{{ url_for('sobre') }}" class="{{ 'ativo' if ep=='sobre' }}">Sobre</a>
+      <span class="sep"></span>
+      {% if user %}
+        <a href="{{ url_for('painel') }}" class="{{ 'ativo' if ep in ('painel','novo_produto','editar') }}">Meu painel</a>
+        <a href="{{ url_for('notificacoes') }}" class="sino {{ 'ativo' if ep=='notificacoes' }}" aria-label="Notificações{{ ' (' ~ nao_lidas ~ ' não lidas)' if nao_lidas }}">🔔<span class="sino-texto">Notificações</span>{% if nao_lidas %}<span class="contador">{{ nao_lidas if nao_lidas < 100 else '99+' }}</span>{% endif %}</a>
+        <a href="{{ url_for('perfil') }}" class="{{ 'ativo' if ep in ('perfil','editar_perfil') }}">Perfil</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="{{ 'ativo' if ep=='login' }}">Entrar</a>
+        <a class="btn" href="{{ url_for('cadastro') }}">Quero vender</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    {% for cat, msg in get_flashed_messages(with_categories=true) %}<div class="flash {{ cat }}" role="status">{{ msg }}</div>{% endfor %}
+    {% block conteudo %}{% endblock %}
+  </div>
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <div class="rodape-grid">
+      <div>
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Empreende Tec" class="logo">
+        <p>A vitrine dos estudantes empreendedores. Produtos e serviços feitos por pessoas perto de você!</p>
+      </div>
+      <div>
+        <h4>Navegar</h4>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Início</a></li>
+          <li><a href="{{ url_for('produtos') }}">Produtos e serviços</a></li>
+          <li><a href="{{ url_for('sobre') }}">Sobre o projeto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Para vendedores</h4>
+        <ul>
+          {% if user %}
+          <li><a href="{{ url_for('painel') }}">Meu painel</a></li>
+          <li><a href="{{ url_for('novo_produto') }}">Novo anúncio</a></li>
+          <li><a href="{{ url_for('perfil') }}">Meu perfil</a></li>
+          <li><a href="{{ url_for('notificacoes') }}">Notificações</a></li>
+          {% else %}
+          <li><a href="{{ url_for('cadastro') }}">Criar conta</a></li>
+          <li><a href="{{ url_for('login') }}">Entrar</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <div class="rodape-fim">
+      <span>© Empreende Tec · produtos e serviços feitos por estudantes</span>
+      <span>Feito com Flask + SQLite</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

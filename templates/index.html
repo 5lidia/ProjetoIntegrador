@@ -1,0 +1,57 @@
+{% extends 'base.html' %}{% from '_card.html' import card %}
+{% block titulo %}Início{% endblock %}
+{% block conteudo %}
+<section class="hero">
+  <div>
+    <span class="sobretitulo">Vitrine dos estudantes</span>
+    <h1>Compre de quem <em>estuda com você</em>.</h1>
+    <p class="lead">Doces, lanches, artesanato, roupas, materiais e serviços feitos por estudantes empreendedores, tudo num só lugar.</p>
+    <form class="busca-hero" method="get" action="{{ url_for('produtos') }}" role="search">
+      <label class="sr-only" for="busca">Buscar</label>
+      <input id="busca" name="q" placeholder="O que você procura hoje?">
+      <button class="btn">Buscar</button>
+    </form>
+    <div class="numeros">
+      <div><strong>{{ destaques|length }}</strong><span>anúncios</span></div>
+      <div><strong>{{ categorias|length }}</strong><span>categorias</span></div>
+      <div><strong>100%</strong><span>seguro</span></div>
+    </div>
+  </div>
+  <div class="hero-arte"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Empreende Tec"></div>
+</section>
+
+<section class="secao">
+  <div class="secao-topo">
+    <div><h2>Navegue por categoria</h2><p>Encontre rapidinho o que você quer.</p></div>
+  </div>
+  <div class="cats">
+    {% for c in categorias %}<a class="cat" href="{{ url_for('produtos', categoria=c.id) }}"><span>{{ c.icone }}</span>{{ c.nome }}</a>{% endfor %}
+  </div>
+</section>
+
+<section class="secao">
+  <div class="secao-topo">
+    <div><h2>Anúncios</h2><p>As novidades da vitrine.</p></div>
+    <a href="{{ url_for('produtos') }}">Ver todos →</a>
+  </div>
+  {% if destaques %}
+    <div class="grid">{% for p in destaques %}{{ card(p) }}{% endfor %}</div>
+  {% else %}
+    <div class="vazio"><span>🛍️</span><h3>Ainda não há anúncios</h3><p>Seja o primeiro a mostrar o seu trabalho.</p><a class="btn" href="{{ url_for('cadastro') }}">Anunciar agora</a></div>
+  {% endif %}
+</section>
+
+<section class="secao">
+  <div class="secao-topo"><div><h2>Como funciona</h2><p>Simples para quem vende e para quem compra.</p></div></div>
+  <div class="passos">
+    <div class="passo"><b>1</b><h3>Crie sua conta</h3><p>Cadastre-se como vendedor com seu nome, turma e o nome da sua loja.</p></div>
+    <div class="passo"><b>2</b><h3>Publique seus anúncios</h3><p>Coloque foto, preço, forma de pagamento e onde você entrega.</p></div>
+    <div class="passo"><b>3</b><h3>Receba interessados</h3><p>Os clientes deixam o contato e você combina tudo pelo WhatsApp.</p></div>
+  </div>
+</section>
+
+<section class="secao chamada">
+  <div><h2>Tem um produto ou serviço?</h2><p>Abra sua lojinha na vitrine em poucos minutos. É grátis.</p></div>
+  <a class="btn btn-lg" href="{{ url_for('cadastro') }}">Quero vender</a>
+</section>
+{% endblock %}

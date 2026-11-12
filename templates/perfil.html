@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block titulo %}Perfil{% endblock %}
+{% block conteudo %}
+<div class="cabecalho-pagina"><span class="sobretitulo">Minha conta</span><h1>Meu perfil</h1></div>
+<div class="perfil">
+  <div class="card perfil-cartao">
+    {% if user.foto %}<img class="avatar" src="{{ url_for('uploaded_file', filename=user.foto) }}" alt="">{% else %}<div class="avatar-letra">{{ user.nome[:1]|upper }}</div>{% endif %}
+    <h2 style="margin-bottom:.2rem">{{ user.nome }}</h2>
+    <p class="suave">{{ user.loja or 'Sem nome de loja' }}</p>
+    <span class="badge">{{ total }} {{ 'anúncio' if total == 1 else 'anúncios' }}</span>
+    <div class="botoes" style="justify-content:center;flex-direction:column;align-items:stretch">
+      <a class="btn btn-bloco" href="{{ url_for('painel') }}">Meu painel</a>
+      <a class="btn btn-bloco btn-sec" href="{{ url_for('notificacoes') }}">🔔 Notificações{% if nao_lidas %} ({{ nao_lidas }}){% endif %}</a>
+      <form method="post" action="{{ url_for('logout') }}"><button class="btn btn-bloco btn-escuro">Sair da conta</button></form>
+    </div>
+  </div>
+  <div>
+    <div class="card painel">
+      <div class="secao-topo" style="margin-bottom:.5rem"><h3 style="margin:0">Dados da conta</h3><a class="btn btn-sm btn-sec" href="{{ url_for('editar_perfil') }}">Editar perfil</a></div>
+      <dl class="dados">
+        <div><dt>Loja</dt><dd>{{ user.loja or '—' }}</dd></div>
+        <div><dt>Turma</dt><dd>{{ user.turma }}</dd></div>
+        <div><dt>E-mail</dt><dd>{{ user.email }}</dd></div>
+        <div><dt>Telefone</dt><dd>{{ user.telefone }}</dd></div>
+        <div><dt>Usuário</dt><dd>{{ user.usuario }}</dd></div>
+        <div><dt>Anúncios</dt><dd>{{ total }}</dd></div>
+      </dl>
+    </div>
+    <div class="zona-perigo">
+      <p><strong>Excluir conta</strong><br>Apaga sua conta e todos os seus anúncios. Não dá para desfazer.</p>
+      <form method="post" action="{{ url_for('excluir_conta') }}" onsubmit="return confirm('Excluir sua conta e todos os anúncios?')"><button class="btn btn-perigo">Excluir conta</button></form>
+    </div>
+  </div>
+</div>
+{% endblock %}

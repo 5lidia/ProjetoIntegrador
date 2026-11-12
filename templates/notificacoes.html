@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block titulo %}Notificações{% endblock %}
+{% block conteudo %}
+<div class="painel-topo">
+  <div><span class="sobretitulo">Avisos da sua conta</span><h1 style="margin:0">Notificações</h1></div>
+  {% if itens %}
+  <div class="botoes">
+    {% if nao_lidas %}<form method="post" action="{{ url_for('ler_todas_notificacoes') }}"><button class="btn btn-sec">Marcar todas como lidas</button></form>{% endif %}
+    <form method="post" action="{{ url_for('limpar_notificacoes') }}" onsubmit="return confirm('Apagar todas as notificações?')"><button class="btn btn-sec">Limpar tudo</button></form>
+  </div>
+  {% endif %}
+</div>
+
+{% if itens %}
+<ul class="notifs">
+  {% for n in itens %}
+  <li class="notif {{ '' if n.lida else 'nova' }}">
+    <span class="notif-icone" aria-hidden="true">{{ ICONES_NOTIF.get(n.tipo, '🔔') }}</span>
+    <div class="notif-corpo">
+      <a href="{{ url_for('abrir_notificacao', nid=n.id) }}"><strong>{{ n.titulo }}</strong></a>
+      {% if n.mensagem %}<p>{{ n.mensagem }}</p>{% endif %}
+      <small>{{ n.created_at }}</small>
+    </div>
+    {% if not n.lida %}<span class="ponto" title="Não lida"></span>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="vazio"><span>🔔</span><h3>Nenhuma notificação por enquanto</h3><p>Quando alguém se interessar por um anúncio seu, ou um produto esgotar, o aviso aparece aqui.</p></div>
+{% endif %}
+{% endblock %}

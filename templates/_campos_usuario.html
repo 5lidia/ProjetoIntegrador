@@ -1,0 +1,9 @@
+<div class="campos">
+  <label>Nome *<input name="nome" required value="{{ v.nome or '' }}" autocomplete="name"></label>
+  <label>Turma *<input name="turma" required value="{{ v.turma or '' }}" placeholder="Ex.: 2º A"></label>
+  <label>E-mail *<input name="email" type="email" required value="{{ v.email or '' }}" autocomplete="email"></label>
+  <label>Telefone *<input name="telefone" required value="{{ v.telefone or '' }}" autocomplete="tel" placeholder="(71) 99999-9999"></label>
+  <label>Nome da loja<input name="loja" value="{{ v.loja or '' }}" placeholder="Ex.: Doce Empada"></label>
+  <label>Usuário *<input name="usuario" required value="{{ v.usuario or '' }}" autocomplete="username"></label>
+  <label class="inteiro">Foto<input type="file" name="foto" accept="image/*"><span class="dica">PNG, JPG ou WEBP, até 5 MB.</span></label>
+</div>

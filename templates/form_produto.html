@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block titulo %}{{ 'Editar anúncio' if p.id else 'Novo anúncio' }}{% endblock %}
+{% block conteudo %}
+<div class="form-estreito">
+  <nav class="trilha"><a href="{{ url_for('painel') }}">Meu painel</a> / {{ 'Editar anúncio' if p.id else 'Novo anúncio' }}</nav>
+  <div class="cabecalho-pagina"><h1>{{ 'Editar anúncio' if p.id else 'Novo anúncio' }}</h1><p>Capriche na foto e na descrição: é o que faz o cliente se interessar.</p></div>
+  <form class="f card painel" method="post" enctype="multipart/form-data">
+    <div class="campos">
+      <label class="inteiro">Nome *<input name="nome" required value="{{ p.nome or '' }}" placeholder="Ex.: Brigadeiro gourmet"></label>
+      <label>Tipo *<select name="tipo">{% for t in TIPOS %}<option {% if p.tipo==t %}selected{% endif %}>{{ t }}</option>{% endfor %}</select></label>
+      <label>Categoria *<select name="categoria_id">{% for c in categorias %}<option value="{{ c.id }}" {% if p.categoria_id==c.id %}selected{% endif %}>{{ c.icone }} {{ c.nome }}</option>{% endfor %}</select></label>
+      <label class="inteiro">Descrição *<textarea name="descricao" rows="4" required>{{ p.descricao or '' }}</textarea></label>
+      <label>Preço (R$) *<input name="preco" required inputmode="decimal" value="{{ p.preco if p.preco is not none else '' }}" placeholder="0,00"></label>
+      <label>Quantidade *<input name="quantidade" type="number" min="0" required value="{{ p.quantidade if p.quantidade is not none else '' }}"><span class="dica">Com 0 o anúncio fica como esgotado.</span></label>
+      <fieldset class="inteiro pagamentos">
+        <legend>Formas de pagamento aceitas *</legend>
+        <div class="opcoes">
+          {% for f in PAGAMENTOS %}
+          <label class="opcao"><input type="checkbox" name="pagamento" value="{{ f }}" {% if p.pagamento and pagto_marcado(f, p.pagamento) %}checked{% endif %}><span>{{ f }}</span></label>
+          {% endfor %}
+        </div>
+        <span class="dica">Marque pelo menos uma opção.</span>
+      </fieldset>
+      <label>Local de entrega *<input name="local_entrega" required value="{{ p.local_entrega or '' }}" placeholder="Ex.: Na escola, no intervalo"></label>
+      <label>WhatsApp *<input name="whatsapp" required value="{{ p.whatsapp or '' }}" placeholder="(71) 99999-9999"></label>
+      <label>Imagem<input type="file" name="imagem" accept="image/*"><span class="dica">{{ 'Envie só se quiser trocar a foto.' if p.id else 'PNG, JPG ou WEBP, até 5 MB.' }}</span></label>
+    </div>
+    <div class="botoes"><button class="btn btn-lg">{{ 'Salvar alterações' if p.id else 'Publicar anúncio' }}</button><a class="btn btn-lg btn-sec" href="{{ url_for('painel') }}">Cancelar</a></div>
+  </form>
+</div>
+<script>
+  // exige ao menos uma forma de pagamento marcada
+  document.querySelector('form.f').addEventListener('submit', function (e) {
+    if (!document.querySelector('input[name=pagamento]:checked')) {
+      e.preventDefault();
+      alert('Marque pelo menos uma forma de pagamento.');
+    }
+  });
+</script>
+{% endblock %}

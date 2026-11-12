@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block titulo %}Editar perfil{% endblock %}
+{% block conteudo %}
+<div class="form-estreito">
+  <div class="cabecalho-pagina"><span class="sobretitulo">Minha conta</span><h1>Editar perfil</h1><p>Atualize seus dados e a foto da sua loja.</p></div>
+  <form class="f card painel" method="post" enctype="multipart/form-data">
+    {% set v = user %}{% include '_campos_usuario.html' %}
+    <h3 style="margin-top:.5rem">Trocar senha <small class="dica">(opcional)</small></h3>
+    <div class="campos">
+      <label>Nova senha<input name="senha" type="password" autocomplete="new-password"></label>
+      <label>Confirmar nova senha<input name="confirmar_senha" type="password" autocomplete="new-password"></label>
+    </div>
+    <div class="botoes"><button class="btn">Salvar alterações</button><a class="btn btn-sec" href="{{ url_for('perfil') }}">Cancelar</a></div>
+  </form>
+</div>
+{% endblock %}

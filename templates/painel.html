@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block titulo %}Meu painel{% endblock %}
+{% block conteudo %}
+<div class="painel-topo">
+  <div><span class="sobretitulo">Painel do vendedor</span><h1 style="margin:0">Olá, {{ user.nome }}!</h1></div>
+  <div class="botoes"><a class="btn btn-lg" href="{{ url_for('novo_produto') }}">+ Novo anúncio</a><a class="btn btn-lg btn-sec" href="{{ url_for('perfil') }}">Meu perfil</a></div>
+</div>
+
+<div class="stats">
+  <div class="card stat destaque"><span>Interessados</span><strong>{{ pedidos|length }}</strong></div>
+  <div class="card stat"><span>Anúncios</span><strong>{{ itens|length }}</strong></div>
+  <div class="card stat"><span>Visualizações</span><strong>{{ views }}</strong></div>
+  <div class="card stat"><span>Esgotados</span><strong>{{ esgotados }}</strong></div>
+</div>
+
+<section>
+  <div class="secao-topo"><div><h2>Meus anúncios</h2><p>Veja, edite ou exclua seus anúncios.</p></div></div>
+  {% if itens %}
+  <div class="tabela"><table>
+    <thead><tr><th>Anúncio</th><th>Preço</th><th>Qtd.</th><th>Visualizações</th><th>Status</th><th>Ações</th></tr></thead>
+    <tbody>
+    {% for i in itens %}<tr>
+      <td><div class="miniatura">{% if i.imagem %}<img src="{{ url_for('uploaded_file', filename=i.imagem) }}" alt="">{% else %}<img src="{{ url_for('static', filename='img/favicon.png') }}" alt="">{% endif %}<span>{{ i.nome }}<br><small>{{ i.icone }} {{ i.categoria }}</small></span></div></td>
+      <td><strong>{{ i.preco|brl }}</strong></td>
+      <td>{{ i.quantidade }}</td>
+      <td>{{ i.views }}</td>
+      <td><span class="tag {{ 'tag-esgotado' if i.status=='Esgotado' else 'tag-ok' }}">{{ i.status }}</span></td>
+      <td><div class="botoes">
+        <a class="btn btn-sm btn-sec" href="{{ url_for('produto', produto_id=i.id) }}">Ver</a>
+        <a class="btn btn-sm" href="{{ url_for('editar', produto_id=i.id) }}">Editar</a>
+        <form method="post" action="{{ url_for('excluir', produto_id=i.id) }}" onsubmit="return confirm('Excluir este anúncio?')"><button class="btn btn-sm btn-perigo">Excluir</button></form>
+      </div></td>
+    </tr>{% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="vazio"><span>📦</span><h3>Você ainda não tem anúncios</h3><p>Publique o primeiro e comece a receber interessados.</p><a class="btn" href="{{ url_for('novo_produto') }}">+ Novo anúncio</a></div>
+  {% endif %}
+</section>
+
+<section class="secao" id="interessados">
+  <div class="secao-topo"><div><h2>Clientes interessados</h2><p>Pessoas que deixaram o contato nos seus anúncios.</p></div></div>
+  {% if pedidos %}
+  <div class="tabela"><table>
+    <thead><tr><th>Data</th><th>Produto</th><th>Cliente</th><th>Contato</th><th>Qtd.</th><th>Mensagem</th></tr></thead>
+    <tbody>
+    {% for c in pedidos %}<tr>
+      <td><small>{{ c.created_at }}</small></td>
+      <td><strong>{{ c.produto }}</strong></td>
+      <td>{{ c.nome }}</td>
+      <td>{{ c.email }}<br><a class="btn btn-sm btn-whats" style="margin-top:.35rem" href="https://wa.me/55{{ c.telefone|digitos }}" target="_blank" rel="noopener">{{ c.telefone }}</a></td>
+      <td>{{ c.quantidade }}</td>
+      <td>{{ c.mensagem or '—' }}</td>
+    </tr>{% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="vazio"><span>📬</span><h3>Ninguém se cadastrou para comprar ainda</h3><p>Quando alguém deixar o contato em um anúncio, aparece aqui.</p></div>
+  {% endif %}
+</section>
+{% endblock %}
